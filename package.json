@@ -1,0 +1,10 @@
+{
+  "name": "saucedemo-playwright",
+  "version": "1.0.0",
+  "description": "Playwright Test Automation Framework for SauceDemo.com - Login Scenarios",
+  "scripts": {
+    "test": "pytest tests/ -v --html=reports/report.html --self-contained-html",
+    "test:headed": "pytest tests/ -v --headed --html=reports/report.html --self-contained-html",
+    "test:chromium": "pytest tests/ -v --html=reports/report.html --self-contained-html --browser chromium"
+  }
+}
