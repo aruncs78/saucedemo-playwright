@@ -2,17 +2,16 @@
 Pytest configuration for Playwright test automation framework.
 """
 import pytest
-from playwright.sync_api import sync_playwright, Page, Browser, BrowserContext
+from playwright.sync_api import sync_playwright, Browser, BrowserContext
 
 BASE_URL = "https://www.saucedemo.com"
 SCREENSHOTS_DIR = "reports/screenshots"
 REPORTS_DIR = "reports"
 
-# Test Credentials
 VALID_USERS = {
     "standard": {"username": "standard_user", "password": "secret_sauce"},
-    "standard_2": {"username": "problem_user", "password": "secret_sauce"},
-    "snerd": {"username": "performance_glitch_user", "password": "secret_sauce"},
+    "problem_user": {"username": "problem_user", "password": "secret_sauce"},
+    "performance_glitch_user": {"username": "performance_glitch_user", "password": "secret_sauce"},
 }
 
 INVALID_CREDENTIALS = {
@@ -61,8 +60,11 @@ def products_page(page):
     return ProductsPage(page)
 
 
-def pytest_runtest_makereport(item, report):
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
     """Capture screenshot on test failure."""
+    outcome = yield
+    report = outcome.get_result()
     if report.when == "call" and report.failed:
         try:
             pg = item.funcargs.get("page")
